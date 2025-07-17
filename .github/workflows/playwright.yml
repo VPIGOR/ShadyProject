@@ -1,0 +1,53 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    # Run tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        test-suite: [api, ui, all]
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: lts/*
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    
+    - name: Run API Tests
+      if: matrix.test-suite == 'api'
+      run: npm run test:api
+    
+    - name: Run UI Tests
+      if: matrix.test-suite == 'ui'
+      run: npm run test:ui
+    
+    - name: Run All Tests
+      if: matrix.test-suite == 'all'
+      run: npm test
+    
+    - name: Upload Playwright Report
+      uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report-${{ matrix.test-suite }}
+        path: playwright-report/
+        retention-days: 30

@@ -1,0 +1,23 @@
+{
+  "name": "shady_project",
+  "version": "1.0.0",
+  "description": "Playwright automation testing project with API and UI tests",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test tests/ui",
+    "test:api": "npx playwright test tests/api",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "test:report": "npx playwright show-report",
+    "install:browsers": "npx playwright install"
+  },
+  "keywords": ["playwright", "automation", "testing", "api", "ui"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.54.1",
+    "@types/node": "^24.0.14",
+    "csv-parser": "^3.2.0"
+  }
+}
