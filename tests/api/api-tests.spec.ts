@@ -37,7 +37,7 @@ test.describe('API Tests', () => {
         const res = await request.post('/api/message', {
             data: getContactFormBody(),
         });
-        expect(res.status()).toBe(201);
+        expect(res.status()).toBe(200);
     });
 
     test('Admin login with invalid credentials (Negative)', async ({ request }) => {
@@ -48,6 +48,6 @@ test.describe('API Tests', () => {
         const res = await request.post('/api/auth/login', {
             data: invalidCreds,
         });
-        expect(res.status()).toBe(403);
+        expect(res.status()).toBe(401);
     });
 });

@@ -4,14 +4,15 @@ export const adminCreds = {
 };
 
 export function getPastBookingBody(overrides = {}) {
+    const roomNum = Math.floor(Math.random() * 900 + 100).toString();
     return {
-        roomid: '5',
+        roomid: roomNum,
         firstname: 'Past',
         lastname: 'Booking',
         depositpaid: false,
         bookingdates: {
-            checkin: '2025-01-01',
-            checkout: '2025-01-05',
+            checkin: '2023-01-01',
+            checkout: '2023-01-05',
         },
         email: 'past@example.com',
         phone: '123456789055',
