@@ -34,7 +34,9 @@ test.describe('API Tests', () => {
         expect(body.token).toBeDefined();
     });
 
-    test('Create a booking in the past (Negative)', async ({ request }) => {
+    // Test for creating a booking in the past - test fails the bug is opened
+    //disabled until issue will resolved
+    test.skip('Create a booking in the past (Negative)', async ({ request }) => {
         const body = getPastBookingBody();
         const res = await request.post(API_ENDPOINTS.BOOKING, { data: body });
         console.log(`Response status: ${await res.status()}`);

@@ -20,9 +20,12 @@ shady_project/
 │       └── test-data/          # UI test data files
 │           └── contact-form-data.csv
 ├── playwright-report/          # Test execution reports
-├── .env.example               # Environment variables template
 ├── .env                       # Local environment variables (not committed)
+├── .env.example              # Environment variables template
 ├── .gitignore                 # Git ignore rules
+├── .github/                   # GitHub configuration
+│   └── workflows/
+│       └── playwright.yml     # GitHub Actions CI/CD workflow
 ├── playwright.config.ts       # Playwright configuration
 ├── package.json              # Project dependencies and scripts
 └── README.md                 # Project documentation
@@ -39,7 +42,7 @@ shady_project/
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-repository-url>
+   git clone https://github.com/VPIGOR/ShadyProject.git
    cd shady_project
    ```
 
@@ -148,7 +151,7 @@ The project uses the Page Object Model pattern for maintainable and reusable UI 
 
 ### Test Data Management
 
-- **API Tests**: Centralized test data in `api-tests-data.ts` with comprehensive JSDoc annotations
+- **API Tests**: Centralized test data in `api-tests-base.ts` with comprehensive JSDoc annotations
 - **UI Tests**: Centralized test utilities in `ui-tests-base.ts` with reusable data generators
 - **Page Object Model**: Reusable page classes for UI interactions
 - **Random Data**: Generated dynamically for unique test scenarios
@@ -166,7 +169,6 @@ The project uses the Page Object Model pattern for maintainable and reusable UI 
 
 The project uses environment variables to avoid hardcoding sensitive credentials:
 
-- **`.env.example`**: Template file showing required environment variables
 - **`.env`**: Local environment file (not committed to git)
 - **Required Variables**:
   - `ADMIN_USERNAME`: Admin username for authentication tests
@@ -217,7 +219,7 @@ The project includes GitHub Actions workflow (`.github/workflows/playwright.yml`
 
 **API Tests:**
 1. Add test cases to `tests/api/api-tests.spec.ts`
-2. Update test data in `tests/api/api-tests-data.ts`
+2. Update test data in `tests/api/api-tests-base.ts`
 3. Follow existing naming conventions
 
 **UI Tests:**

@@ -110,10 +110,6 @@ export const HTTP_STATUS = {
     INTERNAL_SERVER_ERROR: 500
 } as const;
 
-/**
- * Common API endpoints for the application
- * @constant {Object} API_ENDPOINTS
- */
 export const API_ENDPOINTS = {
     AUTH_LOGIN: '/api/auth/login',
     BOOKING: '/api/booking',
