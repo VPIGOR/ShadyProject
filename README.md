@@ -9,18 +9,23 @@ shady_project/
 ├── tests/
 │   ├── api/                    # API Test Files
 │   │   ├── api-tests.spec.ts   # API test scenarios
-│   │   └── api-tests-data.ts   # API test data and utilities
+│   │   └── api-tests-base.ts   # API test data and utilities
 │   └── ui/                     # UI Test Files
 │       ├── ui-tests.spec.ts    # UI test scenarios
+│       ├── ui-tests-base.ts    # UI test data generators and utilities
 │       ├── pages/              # Page Object Model classes
 │       │   ├── AdminRoomPage.ts
 │       │   ├── LoginPage.ts
 │       │   └── MainPage.ts
 │       └── test-data/          # UI test data files
 │           └── contact-form-data.csv
-├── playwright.config.ts        # Playwright configuration
-├── package.json               # Project dependencies and scripts
-└── README.md                  # Project documentation
+├── playwright-report/          # Test execution reports
+├── .env.example               # Environment variables template
+├── .env                       # Local environment variables (not committed)
+├── .gitignore                 # Git ignore rules
+├── playwright.config.ts       # Playwright configuration
+├── package.json              # Project dependencies and scripts
+└── README.md                 # Project documentation
 ```
 
 ## 🚀 Getting Started
@@ -46,6 +51,21 @@ shady_project/
 3. **Install Playwright browsers:**
    ```bash
    npm run install:browsers
+   ```
+
+4. **Environment Setup:**
+   ```bash
+   # Copy the environment variables template
+   cp .env.example .env
+   
+   # Update .env with your actual credentials
+   # Edit the .env file and set your admin credentials
+   ```
+
+   The `.env` file should contain:
+   ```env
+   ADMIN_USERNAME=your_admin_username
+   ADMIN_PASSWORD=your_admin_password
    ```
 
 ## 🧪 Running Tests
@@ -128,15 +148,34 @@ The project uses the Page Object Model pattern for maintainable and reusable UI 
 
 ### Test Data Management
 
-- **API Tests**: Centralized test data in `api-tests-data.ts`
-- **UI Tests**: CSV files and dynamic data generation
-- **Random Data**: Generated for unique test scenarios
+- **API Tests**: Centralized test data in `api-tests-data.ts` with comprehensive JSDoc annotations
+- **UI Tests**: Centralized test utilities in `ui-tests-base.ts` with reusable data generators
+- **Page Object Model**: Reusable page classes for UI interactions
+- **Random Data**: Generated dynamically for unique test scenarios
+- **Test Constants**: Centralized selectors, timeouts, and validation patterns
+
+#### Test Base Features:
+- **API Test Base**: Random data generators, HTTP status constants, endpoint definitions
+- **UI Test Base**: Form data generators, UI selectors, timeout constants, validation patterns
+- **Override Support**: Customizable test data for specific scenarios
+- **Type Safety**: Full TypeScript support with comprehensive annotations
 
 ## ⚙️ Configuration
+
+### Environment Variables
+
+The project uses environment variables to avoid hardcoding sensitive credentials:
+
+- **`.env.example`**: Template file showing required environment variables
+- **`.env`**: Local environment file (not committed to git)
+- **Required Variables**:
+  - `ADMIN_USERNAME`: Admin username for authentication tests
+  - `ADMIN_PASSWORD`: Admin password for authentication tests
 
 ### Playwright Configuration (`playwright.config.ts`)
 
 - **Base URL**: `https://automationintesting.online`
+- **Environment Variables**: Automatically loaded using dotenv
 - **Parallel Execution**: Enabled for faster test runs
 - **Browser Support**: Chrome, Firefox, Safari
 - **Reporting**: HTML reports with trace collection
@@ -147,6 +186,7 @@ The project uses the Page Object Model pattern for maintainable and reusable UI 
 The project is configured to work with:
 - **Target Application**: Automation In Testing website
 - **Test Execution**: Local and CI environments
+- **Credential Management**: Environment variables for security
 - **Reporting**: HTML reports with detailed traces
 
 ## 📊 Test Reports
@@ -191,6 +231,9 @@ The project includes GitHub Actions workflow (`.github/workflows/playwright.yml`
 - Implement proper error handling
 - Keep test data separate from test logic
 - Use Page Object Model for UI tests
+- **Never hardcode credentials** - use environment variables
+- Store sensitive data in `.env` file (not committed to git)
+- Use `.env.example` as a template for required environment variables
 - Add appropriate assertions
 - Include both positive and negative test scenarios
 
@@ -211,6 +254,16 @@ The project includes GitHub Actions workflow (`.github/workflows/playwright.yml`
 3. **Dependencies:**
    ```bash
    npm install
+   ```
+
+4. **Environment Variables:**
+   ```bash
+   # Ensure .env file exists and contains required variables
+   cp .env.example .env
+   
+   # Verify environment variables are loaded
+   echo $ADMIN_USERNAME  # On Unix/Mac
+   echo $env:ADMIN_USERNAME  # On Windows PowerShell
    ```
 
 ## 📝 Contributing

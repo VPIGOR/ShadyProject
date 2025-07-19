@@ -2,6 +2,13 @@ import { test, expect } from '@playwright/test';
 import { AdminRoomPage } from './pages/AdminRoomPage';
 import { MainPage } from './pages/MainPage';
 import { LoginPage } from './pages/LoginPage';
+import { 
+    adminLoginCreds, 
+    getRoomTestData, 
+    getContactFormTestData,
+    getInvalidLoginCreds,
+    UI_TIMEOUTS
+} from './ui-tests-base';
 
 test.beforeEach(async ({}, testInfo) => {
     console.log(`Starting test: ${testInfo.title}`);
@@ -20,22 +27,78 @@ test.afterEach(async ({}, testInfo) => {
 
 test.describe('UI Tests', () => {
   
-  test('Create a new room without details (Positive)', async ({ page }) => {
+  test('Create a new room with generated data (Positive)', async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.login();
+    
     const roomPage = new AdminRoomPage(page);
-    const roomNum = Math.floor(Math.random() * 900 + 100).toString();
-    const roomType = 'Single';
-    const roomPrice = Math.floor(Math.random() * 900 + 100).toString();
-    console.log(`Creating room with number: ${roomNum}`);
-    await roomPage.createRoom(roomNum, roomType, roomPrice);
-    expect(await roomPage.isRoomVisible(roomNum)).toBe(true);
+    const roomData = getRoomTestData();
+    
+    console.log(`Creating room with number: ${roomData.roomNumber}`);
+    await roomPage.createRoom(roomData.roomNumber, roomData.roomType, roomData.roomPrice);
+    expect(await roomPage.isRoomVisible(roomData.roomNumber)).toBe(true);
   });
 
   test('Submit contact form without name (Negative)', async ({ page }) => {
     await page.goto('/');
     const contact = new MainPage(page);
-    await contact.submitContactForm('email@test.com', '123456789054', 'Test Subject', 'This is a test message.');
-    expect(await contact.isSuccessMessageVisible()).toBe(false);
+    
+    // Generate contact form data but override name to be empty
+    const contactData = getContactFormTestData({ name: '' });
+    
+    await contact.submitContactForm(
+      contactData.name,    // empty name
+      contactData.email, 
+      contactData.phone, 
+      contactData.subject, 
+      contactData.message
+    );
+    expect(await contact.isAlertVisible()).toBe(true);
+  });
+
+  test('Submit complete contact form (Positive)', async ({ page }) => {
+    await page.goto('/');
+    const contact = new MainPage(page);
+    
+    // Generate complete contact form data
+    const contactData = getContactFormTestData();
+    
+    await contact.submitContactForm(
+      contactData.name,
+      contactData.email, 
+      contactData.phone, 
+      contactData.subject, 
+      contactData.message
+    );
+    // Expect success message to be visible
+    expect(await contact.isSuccessMessageVisible()).toBe(true);
+  });
+
+  test('Login with invalid credentials (Negative)', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    const invalidCreds = getInvalidLoginCreds();
+    
+    await loginPage.login(invalidCreds.username, invalidCreds.password);
+    
+    // Expect login to fail (error toast should be visible)
+    expect(await loginPage.isLoginFailed()).toBe(true);
+  });
+
+  test('Create room with different room types (Data-driven)', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.login();
+    
+    const roomPage = new AdminRoomPage(page);
+    
+    // Test with different room types
+    const roomTypes = ['Single', 'Double', 'Suite'];
+    
+    for (const roomType of roomTypes) {
+      const roomData = getRoomTestData({ roomType });
+      
+      console.log(`Creating ${roomType} room with number: ${roomData.roomNumber}`);
+      await roomPage.createRoom(roomData.roomNumber, roomData.roomType, roomData.roomPrice);
+      expect(await roomPage.isRoomVisible(roomData.roomNumber)).toBe(true);
+    }
   });
 });

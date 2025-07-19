@@ -29,6 +29,7 @@ export class LoginPage {
     }
 
     async isLoginFailed(): Promise<boolean> {
+        await this.errorToast.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
         return await this.errorToast.isVisible();
     }
 

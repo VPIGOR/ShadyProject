@@ -9,6 +9,7 @@ export class MainPage {
   readonly messageTextarea: Locator;
   readonly submitButton: Locator;
   readonly successMessage: Locator;
+  readonly alertMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -19,6 +20,7 @@ export class MainPage {
     this.messageTextarea = page.locator('#description');
     this.submitButton = page.locator('//button[contains(text(),"Submit")]');
     this.successMessage = page.locator('//p[contains(text(),"We\'ll get back to you about")]');
+    this.alertMessage = page.locator('.alert.alert-danger');
   }
 
   async submitContactForm(name: string = "", email: string = "", phone: string = "", subject: string = "", message: string = "") {
@@ -30,7 +32,13 @@ export class MainPage {
     await this.submitButton.click();
   }
 
+  async isAlertVisible(): Promise<boolean> {
+    await this.alertMessage.waitFor({ state: 'visible', timeout: 5000 });
+    return await this.alertMessage.isVisible();
+  }
+
   async isSuccessMessageVisible(): Promise<boolean> {
+    await this.successMessage.waitFor({ state: 'visible', timeout: 5000 });
     return await this.successMessage.isVisible();
   }
 }

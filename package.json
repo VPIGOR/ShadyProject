@@ -12,12 +12,21 @@
     "test:report": "npx playwright show-report",
     "install:browsers": "npx playwright install"
   },
-  "keywords": ["playwright", "automation", "testing", "api", "ui"],
+  "keywords": [
+    "playwright",
+    "automation",
+    "testing",
+    "api",
+    "ui"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.54.1",
     "@types/node": "^24.0.14",
     "csv-parser": "^3.2.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.0"
   }
 }
